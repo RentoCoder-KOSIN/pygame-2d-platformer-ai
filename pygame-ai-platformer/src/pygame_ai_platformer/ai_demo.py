@@ -8,15 +8,18 @@
 または:
     uv run python -m pygame_ai_platformer.ai_demo
 """
+
 import pygame
 
+# from .ai.random_agent import RandomAgent
+from .ai.rule_agent import RuleAgent
 from .game.game import Game
-from .ai.random_agent import RandomAgent
 
 
 def main():
     game = Game(render=True)
-    agent = RandomAgent()
+    # agent = RandomAgent()
+    agent = RuleAgent()
     episode = 1
 
     running = True

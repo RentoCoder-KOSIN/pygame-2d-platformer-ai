@@ -3,6 +3,7 @@
 キーボード入力もAIの行動もいったん apply_action() に集約することで、
 人間操作とAI操作(game.step())の両方から同じ物理演算を使えるようにしている。
 """
+
 import pygame
 
 PLAYER_WIDTH = 30
@@ -45,15 +46,17 @@ class Player(pygame.sprite.Sprite):
         action: "LEFT" / "RIGHT" / "JUMP" / "NONE"
         Phase1では同時押しを扱わないシンプルな1行動のみ対応。
         """
-        self.vel_x = 0
         if action == "LEFT":
             self.vel_x = -MOVE_SPEED
         elif action == "RIGHT":
             self.vel_x = MOVE_SPEED
+        elif action == "NONE":
+            self.vel_x = 0
         elif action == "JUMP":
             if not self.is_jumping:
                 self.vel_y = JUMP_POWER
                 self.is_jumping = True
+            # vel_xは変更しない(直前の移動方向の慣性を維持)
         # "NONE" は何もしない
 
     def update(self, platforms):

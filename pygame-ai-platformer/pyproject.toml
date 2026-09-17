@@ -6,19 +6,22 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "pygame>=2.5.0",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0.0",
     "numpy>=1.26.0",
     "pandas>=2.2.0",
+    "scikit-learn>=1.4.0",
+    "joblib>=1.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
 ]
 
 [project.scripts]
 play = "pygame_ai_platformer.main:main"
 ai-demo = "pygame_ai_platformer.ai_demo:main"
 collect-data = "pygame_ai_platformer.collect_data:main"
+train-ml = "pygame_ai_platformer.train_ml_agent:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -29,10 +32,3 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pygame_ai_platformer"]
-
-[dependency-groups]
-dev = [
-    "pytest>=8.0.0",
-    "numpy>=1.26.0",
-    "pandas>=2.2.0",
-]

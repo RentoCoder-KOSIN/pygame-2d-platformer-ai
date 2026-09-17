@@ -4,7 +4,6 @@
 フレーム単位で溜めておき、CSVとして書き出す。Phase5の行動予測モデルの
 学習データとして使うことを想定している。
 """
-
 import csv
 import os
 import time as time_module

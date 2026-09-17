@@ -10,6 +10,7 @@ ENEMY_WIDTH = 30
 ENEMY_HEIGHT = 30
 ENEMY_COLOR = (150, 30, 30)
 ENEMY_SPEED = 2
+ENEMY_DODGE_SPEED = ENEMY_SPEED * 2  # Phase6: 逃げる時は通常の2倍速
 DEFAULT_PATROL_RANGE = 150
 
 
@@ -24,12 +25,30 @@ class Enemy(pygame.sprite.Sprite):
         self.left_bound = x - patrol_range
         self.right_bound = x + patrol_range
         self.speed = -ENEMY_SPEED
+        self._dodge_timer = 0
 
     def reset(self):
         self.rect.topleft = self.start_pos
         self.speed = -ENEMY_SPEED
+        self._dodge_timer = 0
+
+    def dodge(self, direction, duration=20):
+        """Phase6用: directionへduration フレームだけ素早く逃げる。
+
+        direction: +1(右へ)/-1(左へ)
+        """
+        self.speed = ENEMY_DODGE_SPEED * direction
+        self._dodge_timer = duration
 
     def update(self):
+        if self._dodge_timer > 0:
+            self._dodge_timer -= 1
+            self.rect.x += self.speed
+            if self._dodge_timer == 0:
+                # 逃げ終わったら、その方向のまま通常速度のパトロールに戻す
+                self.speed = ENEMY_SPEED if self.speed > 0 else -ENEMY_SPEED
+            return
+
         self.rect.x += self.speed
         if self.rect.x <= self.left_bound or self.rect.x >= self.right_bound:
             self.speed *= -1

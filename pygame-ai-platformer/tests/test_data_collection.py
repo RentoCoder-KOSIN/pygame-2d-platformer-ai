@@ -1,5 +1,4 @@
 """README「10. Phase 4 — 機械学習」データ収集のスモークテスト。"""
-
 import csv
 import os
 import tempfile

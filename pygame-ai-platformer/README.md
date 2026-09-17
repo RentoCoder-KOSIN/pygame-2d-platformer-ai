@@ -148,11 +148,12 @@ pygame-ai-platformer/
 │       │   ├── agent.py
 │       │   ├── random_agent.py
 │       │   ├── rule_agent.py
-│       │   ├── ml_agent.py      # Phase5で追加予定
+│       │   ├── ml_agent.py
 │       │   └── rl_agent.py      # Phase8で追加予定
 │       │
 │       ├── logger.py
 │       ├── collect_data.py
+│       ├── train_ml_agent.py
 │       ├── main.py
 │       └── ai_demo.py
 │
@@ -392,12 +393,13 @@ time,x,y,velocity_x,velocity_y,enemy_distance,goal_distance,action
 のように保存する。
 
 `src/pygame_ai_platformer/logger.py`(記録)と`src/pygame_ai_platformer/collect_data.py`
-(収集スクリプト)に実装済み。`uv run collect-data --episodes 50` で
-`data/training/` 以下にエピソード単位のCSVが溜まっていく。
+(収集スクリプト)に実装済み。`uv run collect-data --episodes 50 --agent rule` で
+`data/training/rule/` 以下にエピソード単位のCSVが溜まっていく(エージェントごとに
+サブディレクトリを分けて保存する)。
 
 ---
 
-# 11. Phase 5 — プレイヤー行動予測 ⬜次のフェーズ
+# 11. Phase 5 — プレイヤー行動予測 ✅完了(RuleAgentの模倣まで)
 
 収集したデータを機械学習モデルに学習させる。
 
@@ -435,6 +437,24 @@ JUMP
 * その他の分類アルゴリズム
 
 その後、必要に応じてニューラルネットワークへ発展させる。
+
+`src/pygame_ai_platformer/collect_data.py`でエージェントごとに
+`data/training/<agent名>/`へCSVを分けて保存し、
+`src/pygame_ai_platformer/train_ml_agent.py`がそれを読み込んで
+DecisionTree/RandomForestを学習、`models/player_action_model.joblib`に保存する。
+`src/pygame_ai_platformer/ai/ml_agent.py`がそのモデルを読み込んで`predict(state)`する
+`MLAgent`を提供する。
+
+現状はRuleAgentのプレイを模倣学習させており(教師データがRuleAgent由来なので
+精度はほぼ100%、30/30エピソードでクリア)、次のステップとして人間のプレイデータを
+`uv run collect-data --agent human`(要実装)のような形で収集し、
+人間らしい行動を学習させることを検討中。
+
+```bash
+uv run collect-data --episodes 60 --agent rule   # data/training/rule/ にCSVが溜まる
+uv run train-ml --model decision_tree            # models/player_action_model.joblib を作成
+uv run ai-demo --agent ml                         # 学習済みモデルでプレイを確認
+```
 
 ---
 
@@ -815,7 +835,7 @@ pytest
 を実装する。
 
 ここまで完成すれば、**AIをゲームへ接続する準備が完了**する。 → 完了。
-現在はPhase4(操作データ収集)まで完了しており、Phase5(行動予測モデル)に着手予定。
+現在はPhase5(RuleAgentの模倣学習)まで完了しており、Phase6(プレイヤーを学習する敵)に着手予定。
 
 ---
 
@@ -851,3 +871,4 @@ Game Environment
 ## Goal
 
 **マリオ風2D横スクロールゲームをAIの実験環境として構築し、AIによるゲームプレイ・敵制御・行動予測・難易度調整・自動テストまでを一つのシステムとして実現する。**
+

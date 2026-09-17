@@ -7,11 +7,10 @@
     2. 少し先に敵がいる → ジャンプ(踏みつけを狙う)
     3. それ以外          → 右へ進む(ゴールは常に右側にあるため)
 """
-
-from ..game.state import Action
 from .agent import Agent
+from ..game.state import Action
 
-HOLE_LOOKAHEAD = 40  # このpx先に足場がなければ「穴が近い」と判断する
+HOLE_LOOKAHEAD = 40    # このpx先に足場がなければ「穴が近い」と判断する
 ENEMY_JUMP_RANGE = 50  # このpx以内前方に敵がいたら「敵が近い」と判断する
 PLAYER_HEIGHT = 40
 

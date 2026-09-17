@@ -8,7 +8,6 @@
     uv run collect-data --episodes 50 --agent random
     uv run collect-data --episodes 5 --render   # 画面を見ながら収集
 """
-
 import argparse
 import os
 
@@ -24,20 +23,19 @@ AGENTS = {
 
 # <repo_root>/data/training
 DEFAULT_OUTPUT_DIR = os.path.normpath(
-    os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "..", "..", "data", "training"
-    )
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "data", "training")
 )
 
 
-def collect(
-    episodes=20,
-    agent_name="rule",
-    max_steps=3000,
-    output_dir=DEFAULT_OUTPUT_DIR,
-    render=False,
-):
-    """episodes回プレイして、エピソードごとにCSVを1つ保存する。"""
+def collect(episodes=20, agent_name="rule", max_steps=3000, output_dir=None, render=False):
+    """episodes回プレイして、エピソードごとにCSVを1つ保存する。
+
+    output_dir未指定の場合は data/training/<agent_name>/ に保存する
+    (エージェントごとにデータを分けることで、質の異なるプレイを混ぜずに学習できる)。
+    """
+    if output_dir is None:
+        output_dir = os.path.join(DEFAULT_OUTPUT_DIR, agent_name)
+
     agent = AGENTS[agent_name]()
     game = Game(render=render)
     logger = EpisodeLogger()
@@ -77,9 +75,7 @@ def main():
     parser.add_argument("--episodes", type=int, default=20)
     parser.add_argument("--agent", choices=list(AGENTS), default="rule")
     parser.add_argument("--max-steps", type=int, default=3000)
-    parser.add_argument(
-        "--render", action="store_true", help="画面表示しながら収集する"
-    )
+    parser.add_argument("--render", action="store_true", help="画面表示しながら収集する")
     args = parser.parse_args()
 
     collect(

@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.pytest_cache/
+.DS_Store
+
+# Phase4等で生成される実験データ・モデル・ログはフォルダ構成だけ.gitkeepで維持する
+data/player/*
+!data/player/.gitkeep
+data/training/*
+!data/training/.gitkeep
+models/*
+!models/.gitkeep
+experiments/*
+!experiments/.gitkeep
+logs/*
+!logs/.gitkeep

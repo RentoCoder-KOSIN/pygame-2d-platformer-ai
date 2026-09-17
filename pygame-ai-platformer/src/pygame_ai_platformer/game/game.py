@@ -30,7 +30,14 @@ REWARD_DEATH = -100
 
 
 class Game:
-    def __init__(self, render=True, width=WIDTH, height=HEIGHT):
+    def __init__(
+        self,
+        render=True,
+        width=WIDTH,
+        height=HEIGHT,
+        smart_enemies=False,
+        enemy_model_path=None,
+    ):
         self.render_enabled = render
         self.width = width
         self.height = height
@@ -45,6 +52,16 @@ class Game:
 
         self.clock = pygame.time.Clock()
         self.camera = Camera(self.width)
+
+        # README「12. Phase 6 — プレイヤーを学習する敵」用。
+        # Trueにすると、Phase5で学習したモデルでプレイヤーの次の行動を予測し、
+        # 「JUMPしてきそう」な時に近くの敵を逃がす。要: 学習済みモデル(uv run train-ml)。
+        self.smart_enemies = smart_enemies
+        self.enemy_ai = None
+        if self.smart_enemies:
+            from ..ai.enemy_ai import PredictiveEnemyAI
+
+            self.enemy_ai = PredictiveEnemyAI(model_path=enemy_model_path)
 
         self.player = None
         self.platforms = None
@@ -104,6 +121,9 @@ class Game:
         self._prev_player_x = self.player.rect.x
 
         if self.state == GameState.PLAYING:
+            if self.smart_enemies and self.enemy_ai is not None:
+                self._apply_smart_enemy_dodges()
+
             self.player.apply_action(action)
             self.player.update(self.platforms)
             self.enemies.update()
@@ -121,6 +141,16 @@ class Game:
     # ------------------------------------------------------------------
     # 内部処理
     # ------------------------------------------------------------------
+    def _apply_smart_enemy_dodges(self):
+        """README「12. Phase 6」用。プレイヤーの行動を予測し、近くの敵を逃がす。"""
+        pre_state = self.get_state()
+        dodges = self.enemy_ai.decide_dodges(pre_state)
+        if not dodges:
+            return
+        for i, enemy in enumerate(self.enemies):
+            if i in dodges:
+                enemy.dodge(dodges[i])
+
     def _check_enemy_collisions(self):
         reward = 0.0
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):

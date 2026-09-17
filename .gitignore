@@ -1,25 +1,31 @@
 # ==============================
+
 # Python
+
 # ==============================
 
-__pycache__/
+**pycache**/
 *.py[cod]
 *$py.class
 
 # Virtual environments
+
 .venv/
 venv/
 env/
 ENV/
 
 # Packaging
+
 build/
 dist/
 *.egg-info/
 .eggs/
 
 # ==============================
+
 # Python tools
+
 # ==============================
 
 .pytest_cache/
@@ -29,7 +35,9 @@ dist/
 htmlcov/
 
 # ==============================
+
 # Environment / Secrets
+
 # ==============================
 
 .env
@@ -37,52 +45,73 @@ htmlcov/
 !.env.example
 
 # ==============================
+
 # Machine Learning
+
 # ==============================
 
 # Trained models
-models/*.pt
-models/*.pth
-models/*.onnx
-models/*.pkl
-models/*.joblib
 
-# ML checkpoints
+models/*
+!models/.gitkeep
+
+# Checkpoints
+
 checkpoints/
 *.ckpt
 
 # ==============================
+
 # Experiment / Training data
+
 # ==============================
 
-# Generated datasets
-data/generated/
-data/training/
+# Player / generated data
 
-# Training logs
-logs/
+data/player/*
+!data/player/.gitkeep
+
+data/generated/*
+!data/generated/.gitkeep
+
+data/training/*
+!data/training/.gitkeep
+
+# Experiment results
+
+experiments/*
+!experiments/.gitkeep
+
+# Logs
+
+logs/*
+!logs/.gitkeep
+
 runs/
 wandb/
-
-# TensorBoard
 tensorboard/
 
 # ==============================
+
 # Pygame
+
 # ==============================
 
-# Generated screenshots / recordings
 screenshots/
 recordings/
 
 # ==============================
+
 # Jupyter
+
 # ==============================
 
 .ipynb_checkpoints/
 
 # ==============================
+
 # OS
+
 # ==============================
 
 .DS_Store
@@ -90,19 +119,24 @@ Thumbs.db
 desktop.ini
 
 # ==============================
+
 # IDE / Editor
+
 # ==============================
 
 .vscode/
 .idea/
 
 # Vim / Neovim
+
 *.swp
 *.swo
 *~
 
 # ==============================
-# Temporary files
+
+# Temporary
+
 # ==============================
 
 *.tmp
@@ -110,11 +144,9 @@ desktop.ini
 *.log
 .cache/
 
-# ==============================
 # Project specific
-# ==============================
 
-# AI-generated / temporary files
 .ai/
 tmp/
 temp/
+

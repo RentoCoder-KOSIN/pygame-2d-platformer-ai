@@ -1,0 +1,120 @@
+# ==============================
+# Python
+# ==============================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ==============================
+# Python tools
+# ==============================
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ==============================
+# Environment / Secrets
+# ==============================
+
+.env
+.env.*
+!.env.example
+
+# ==============================
+# Machine Learning
+# ==============================
+
+# Trained models
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.pkl
+models/*.joblib
+
+# ML checkpoints
+checkpoints/
+*.ckpt
+
+# ==============================
+# Experiment / Training data
+# ==============================
+
+# Generated datasets
+data/generated/
+data/training/
+
+# Training logs
+logs/
+runs/
+wandb/
+
+# TensorBoard
+tensorboard/
+
+# ==============================
+# Pygame
+# ==============================
+
+# Generated screenshots / recordings
+screenshots/
+recordings/
+
+# ==============================
+# Jupyter
+# ==============================
+
+.ipynb_checkpoints/
+
+# ==============================
+# OS
+# ==============================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==============================
+# IDE / Editor
+# ==============================
+
+.vscode/
+.idea/
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+
+# ==============================
+# Temporary files
+# ==============================
+
+*.tmp
+*.temp
+*.log
+.cache/
+
+# ==============================
+# Project specific
+# ==============================
+
+# AI-generated / temporary files
+.ai/
+tmp/
+temp/

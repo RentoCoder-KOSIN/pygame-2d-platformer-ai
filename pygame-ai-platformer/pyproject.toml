@@ -18,6 +18,7 @@ dev = [
 [project.scripts]
 play = "pygame_ai_platformer.main:main"
 ai-demo = "pygame_ai_platformer.ai_demo:main"
+collect-data = "pygame_ai_platformer.collect_data:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

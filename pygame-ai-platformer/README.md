@@ -135,22 +135,26 @@ pygame-ai-platformer/
 ├── pyproject.toml
 │
 ├── src/
-│   ├── game/
-│   │   ├── game.py
-│   │   ├── player.py
-│   │   ├── enemy.py
-│   │   ├── stage.py
-│   │   ├── camera.py
-│   │   └── state.py
-│   │
-│   ├── ai/
-│   │   ├── agent.py
-│   │   ├── random_agent.py
-│   │   ├── rule_agent.py
-│   │   ├── ml_agent.py
-│   │   └── rl_agent.py
-│   │
-│   └── main.py
+│   └── pygame_ai_platformer/
+│       ├── game/
+│       │   ├── game.py
+│       │   ├── player.py
+│       │   ├── enemy.py
+│       │   ├── stage.py
+│       │   ├── camera.py
+│       │   └── state.py
+│       │
+│       ├── ai/
+│       │   ├── agent.py
+│       │   ├── random_agent.py
+│       │   ├── rule_agent.py
+│       │   ├── ml_agent.py      # Phase5で追加予定
+│       │   └── rl_agent.py      # Phase8で追加予定
+│       │
+│       ├── logger.py
+│       ├── collect_data.py
+│       ├── main.py
+│       └── ai_demo.py
 │
 ├── data/
 │   ├── player/
@@ -246,34 +250,36 @@ ATTACK
 
 ---
 
-# 7. Phase 1 — ゲーム制作
+# 7. Phase 1 — ゲーム制作 ✅完了
 
 まずAIを作らず、ゲームそのものを完成させる。
 
 ## 実装するもの
 
 ```text
-[ ] Pygameのゲームループ
-[ ] プレイヤー
-[ ] 左右移動
-[ ] ジャンプ
-[ ] 重力
-[ ] 衝突判定
-[ ] 足場
-[ ] 穴
-[ ] 敵
-[ ] ゴール
-[ ] カメラ
-[ ] 横スクロール
-[ ] ゲームオーバー
-[ ] リスタート
+[x] Pygameのゲームループ
+[x] プレイヤー
+[x] 左右移動
+[x] ジャンプ
+[x] 重力
+[x] 衝突判定
+[x] 足場
+[x] 穴
+[x] 敵
+[x] ゴール
+[x] カメラ
+[x] 横スクロール
+[x] ゲームオーバー
+[x] リスタート
 ```
 
 この段階では普通にキーボードでプレイできるようにする。
 
+`src/pygame_ai_platformer/game/` に実装済み。`uv run play` で起動できる。
+
 ---
 
-# 8. Phase 2 — AIによる自動操作
+# 8. Phase 2 — AIによる自動操作 ✅完了(RandomAgent)
 
 AIからゲームを操作できるようにする。
 
@@ -310,9 +316,11 @@ action = random.choice([
 
 これは後のAIと比較するための**ベースライン**にもなる。
 
+`src/pygame_ai_platformer/ai/random_agent.py` に実装済み。`uv run ai-demo` で動作確認できる。
+
 ---
 
-# 9. Phase 3 — ルールベースAI
+# 9. Phase 3 — ルールベースAI ✅完了
 
 次に、人間が決めたルールでゲームを攻略するAIを作る。
 
@@ -346,11 +354,13 @@ Random AI
 Rule-based AI
 ```
 
-を比較できる。
+を比較できる(RuleAgentは100/100エピソードでクリア、RandomAgentは0/100)。
+
+`src/pygame_ai_platformer/ai/rule_agent.py` に実装済み。
 
 ---
 
-# 10. Phase 4 — 機械学習
+# 10. Phase 4 — 機械学習 ✅完了(データ収集まで)
 
 プレイヤーの操作データを収集する。
 
@@ -381,9 +391,13 @@ time,x,y,velocity_x,velocity_y,enemy_distance,goal_distance,action
 
 のように保存する。
 
+`src/pygame_ai_platformer/logger.py`(記録)と`src/pygame_ai_platformer/collect_data.py`
+(収集スクリプト)に実装済み。`uv run collect-data --episodes 50` で
+`data/training/` 以下にエピソード単位のCSVが溜まっていく。
+
 ---
 
-# 11. Phase 5 — プレイヤー行動予測
+# 11. Phase 5 — プレイヤー行動予測 ⬜次のフェーズ
 
 収集したデータを機械学習モデルに学習させる。
 
@@ -774,33 +788,34 @@ pytest
 まずはAIを一切使わず、**普通に遊べる2D横スクロールゲーム**を完成させる。
 
 ```text
-[ ] Pygameゲームループ
-[ ] プレイヤー
-[ ] 左右移動
-[ ] ジャンプ
-[ ] 重力
-[ ] 足場
-[ ] 穴
-[ ] 敵
-[ ] 衝突判定
-[ ] カメラ
-[ ] 横スクロール
-[ ] ゴール
-[ ] ゲームオーバー
-[ ] リスタート
+[x] Pygameゲームループ
+[x] プレイヤー
+[x] 左右移動
+[x] ジャンプ
+[x] 重力
+[x] 足場
+[x] 穴
+[x] 敵
+[x] 衝突判定
+[x] カメラ
+[x] 横スクロール
+[x] ゴール
+[x] ゲームオーバー
+[x] リスタート
 ```
 
 その後、
 
 ```text
-[ ] game.reset()
-[ ] game.get_state()
-[ ] game.step(action)
+[x] game.reset()
+[x] game.get_state()
+[x] game.step(action)
 ```
 
 を実装する。
 
-ここまで完成すれば、**AIをゲームへ接続する準備が完了**する。
+ここまで完成すれば、**AIをゲームへ接続する準備が完了**する。 → 完了。
+現在はPhase4(操作データ収集)まで完了しており、Phase5(行動予測モデル)に着手予定。
 
 ---
 
@@ -836,4 +851,3 @@ Game Environment
 ## Goal
 
 **マリオ風2D横スクロールゲームをAIの実験環境として構築し、AIによるゲームプレイ・敵制御・行動予測・難易度調整・自動テストまでを一つのシステムとして実現する。**
-

@@ -10,6 +10,7 @@ Game(render=True) で人間がキーボードで遊ぶことも、
 Game(render=False) でAIが高速に大量プレイすることもできるようにしている
 (README「14. Phase 8 — AIによる自動ゲームテスト」を見据えた設計)。
 """
+
 import pygame
 
 from .camera import Camera
@@ -91,7 +92,12 @@ class Game:
         """現在のゲーム状態をdictで取得する(README 5.の例に準拠)"""
         enemies_info = [{"x": e.rect.x, "y": e.rect.y} for e in self.enemies]
         nearby_blocks = [
-            {"x": p.rect.x, "y": p.rect.y, "width": p.rect.width, "height": p.rect.height}
+            {
+                "x": p.rect.x,
+                "y": p.rect.y,
+                "width": p.rect.width,
+                "height": p.rect.height,
+            }
             for p in self.platforms
             if abs(p.rect.centerx - self.player.rect.centerx) < self.width
         ]
@@ -144,17 +150,19 @@ class Game:
     def _apply_smart_enemy_dodges(self):
         """README「12. Phase 6」用。プレイヤーの行動を予測し、近くの敵を逃がす。"""
         pre_state = self.get_state()
-        dodges = self.enemy_ai.decide_dodges(pre_state)
-        if not dodges:
+        intercepts = self.enemy_ai.decide_intercepts(pre_state)
+        if not intercepts:
             return
         for i, enemy in enumerate(self.enemies):
-            if i in dodges:
-                enemy.dodge(dodges[i])
+            if i in intercepts:
+                enemy.boost_toward(intercepts[i])
 
     def _check_enemy_collisions(self):
         reward = 0.0
         for enemy in pygame.sprite.spritecollide(self.player, self.enemies, False):
-            stomped = self.player.vel_y > 0 and self.player.rect.bottom <= enemy.rect.top + 15
+            stomped = (
+                self.player.vel_y > 0 and self.player.rect.bottom <= enemy.rect.top + 15
+            )
             if stomped:
                 enemy.kill()
                 self.player.stomp_bounce()
@@ -206,10 +214,16 @@ class Game:
             self.screen.blit(sprite.image, self.camera.apply(sprite.rect))
 
         if self.state == GameState.CLEARED:
-            self._draw_text("STAGE CLEAR!", 60, self.width // 2 - 180, self.height // 2 - 30)
+            self._draw_text(
+                "STAGE CLEAR!", 60, self.width // 2 - 180, self.height // 2 - 30
+            )
         elif self.state == GameState.GAMEOVER:
-            self._draw_text("GAME OVER", 60, self.width // 2 - 150, self.height // 2 - 30)
-            self._draw_text("Rキーでリスタート", 20, self.width // 2 - 90, self.height // 2 + 40)
+            self._draw_text(
+                "GAME OVER", 60, self.width // 2 - 150, self.height // 2 - 30
+            )
+            self._draw_text(
+                "Rキーでリスタート", 20, self.width // 2 - 90, self.height // 2 + 40
+            )
         else:
             self._draw_text(f"HP: {self.player.hp}", 24, 10, 10)
 
